@@ -1,0 +1,11 @@
+services:
+    mallangbot:
+        build: .
+        image: lin-ion/mallangbot:latest
+        container_name: mallangbot
+        tty: true
+        environment:
+            - NODE_ENV=production
+        volumes:
+            - ./data:/app/data
+            - ./.env.production.local:/app/.env.production.local

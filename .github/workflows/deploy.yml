@@ -1,0 +1,29 @@
+name: Deploy
+on:
+    push:
+        branches: [main]
+        paths:
+            - 'docker-compose.yml'
+            - 'Dockerfile'
+            - 'src/**'
+            - 'package.json'
+            - 'package-lock.json'
+    workflow_dispatch:
+        inputs:
+            force:
+                description: 'Force deploy'
+                required: false
+jobs:
+    build-and-deploy:
+        runs-on: self-hosted
+        steps:
+            - uses: actions/checkout@v4
+            - name: Inject secrets
+              run: cp "$GITHUB_WORKSPACE/../../../../.env.production.local" "$GITHUB_WORKSPACE/.env.production.local" 
+              # dirty...
+            - name: Build production image
+              run: docker compose build --pull
+            - name: Recreate container
+              run: docker compose up -d --force-recreate
+            - name: Clean up old images
+              run: docker image prune -f

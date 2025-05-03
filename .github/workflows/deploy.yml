@@ -17,17 +17,21 @@ jobs:
     build-and-deploy:
         runs-on: self-hosted
         steps:
-            - uses: actions/checkout@v4
+            - name: Checkout repository
+              uses: actions/checkout@v4
+
             - name: Generate .env.production.local
               run: echo "${{ secrets.PRODUCTION_ENV_FILE }}" > .env.production.local
+
             - name: Build production image
               run: docker compose build --pull
+
             - name: Recreate container
               run: docker compose up -d --force-recreate
-            - name: Deploy Discord Commands
-              # TODO: data가 바뀌었을 때만 실행되도록 수정
-              # TODO: 기존 명령어 삭제
-              if: contains(github.event.head_commit.modified, 'src/commands/slash/')
-              run: npm run deploy-commands
+
+            - name: Deploy commands
+              run: docker exec -it discord-bot node dist/deploy-commands.js
+              # TODO: 변경 사항이 있을 경우에만 실행하도록 수정 (deploy-commands.ts에서 구현 필요)
+
             - name: Clean up old images
               run: docker image prune -f

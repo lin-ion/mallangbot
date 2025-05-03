@@ -30,7 +30,7 @@ jobs:
               run: docker compose up -d --force-recreate
 
             - name: Deploy commands
-              run: docker exec -it discord-bot node dist/deploy-commands.js
+              run: docker compose exec -it "$(docker compose config --services)" npm run deploy-commands
               # TODO: 변경 사항이 있을 경우에만 실행하도록 수정 (deploy-commands.ts에서 구현 필요)
 
             - name: Clean up old images

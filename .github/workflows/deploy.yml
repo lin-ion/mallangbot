@@ -18,9 +18,8 @@ jobs:
         runs-on: self-hosted
         steps:
             - uses: actions/checkout@v4
-            - name: Inject secrets
-              run: cp "$GITHUB_WORKSPACE/../../../../.env.production.local" "$GITHUB_WORKSPACE/.env.production.local" 
-              # dirty...
+            - name: Generate .env.production.local
+              run: echo "${{ secrets.PRODUCTION_ENV_FILE }}" > .env.production.local
             - name: Build production image
               run: docker compose build --pull
             - name: Recreate container

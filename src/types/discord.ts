@@ -1,5 +1,4 @@
 import {
-    Awaitable,
     ChatInputCommandInteraction,
     Client,
     ClientEvents,
@@ -8,13 +7,13 @@ import {
 
 export interface DiscordCommand {
     data: SlashCommandOptionsOnlyBuilder; // most abstract type for slash commands
-    execute: (interaction: ChatInputCommandInteraction) => Awaitable<void>;
+    execute: (interaction: ChatInputCommandInteraction) => Promise<void>;
 }
 
 export interface DiscordEvent<K extends keyof ClientEvents = keyof ClientEvents> {
     name: K;
-    once?: boolean;
-    execute: (...args: ClientEvents[K]) => Awaitable<void>;
+    once: boolean;
+    execute: (...args: ClientEvents[K]) => Promise<void>;
 }
 
 export interface CustomClient extends Client {
@@ -24,5 +23,5 @@ export interface CustomClient extends Client {
 export const buildDiscordEvent = <K extends keyof ClientEvents>(args: {
     name: K;
     once: boolean;
-    execute: (...args: ClientEvents[K]) => Awaitable<void>;
+    execute: (...args: ClientEvents[K]) => Promise<void>;
 }): DiscordEvent<K> => args;

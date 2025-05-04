@@ -9,13 +9,11 @@ export default buildDiscordEvent({
             const client = interaction.client as CustomClient;
             const command = client.commands.get(interaction.commandName);
 
-            try {
-                if (!command) {
-                    console.log(`No command matching ${interaction.commandName} was found.`);
-                    return;
-                }
-                await command.execute(interaction);
-            } catch (error) {
+            if (!command) {
+                console.log(`No command matching ${interaction.commandName} was found.`);
+                return;
+            }
+            command.execute(interaction).catch(async (error) => {
                 console.error(error);
                 if (interaction.replied || interaction.deferred) {
                     await interaction.followUp({
@@ -26,7 +24,7 @@ export default buildDiscordEvent({
                         content: 'There was an error while executing this command!',
                     });
                 }
-            }
+            });
         }
     },
 });

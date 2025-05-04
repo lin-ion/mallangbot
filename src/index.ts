@@ -17,7 +17,7 @@ const commandFiles = fs
     .filter((file) => file.endsWith('.ts') || file.endsWith('.js'));
 for (const file of commandFiles) {
     const filePath = path.join(commandsPath, file);
-    const command = (await import(filePath)).default as DiscordCommand;
+    const command = ((await import(filePath)) as { default: DiscordCommand }).default;
     client.commands.set(command.data.name, command);
 }
 
@@ -27,7 +27,7 @@ const eventFiles = fs
     .filter((file) => file.endsWith('.ts') || file.endsWith('.js'));
 for (const file of eventFiles) {
     const filePath = path.join(eventsPath, file);
-    const event = (await import(filePath)).default as DiscordEvent;
+    const event = ((await import(filePath)) as { default: DiscordEvent }).default;
     if (event.once) {
         client.once(event.name, (...args) => event.execute(...args));
     } else {

@@ -12,7 +12,7 @@ const commandFiles = fs
     .filter((file) => file.endsWith('.ts') || file.endsWith('.js'));
 for (const file of commandFiles) {
     const filePath = path.join(commandsPath, file);
-    const command = (await import(filePath)).default as DiscordCommand;
+    const command = ((await import(filePath)) as { default: DiscordCommand }).default;
     commands.push(command.data.toJSON());
 }
 

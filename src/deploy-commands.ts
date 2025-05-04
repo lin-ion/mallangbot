@@ -24,14 +24,12 @@ if (!token || !clientId) {
 
 const rest = new REST().setToken(token);
 
-(async () => {
-    try {
-        console.log(`Started refreshing ${commands.length} application (/) commands.`);
+try {
+    console.log(`Started refreshing ${commands.length} application (/) commands.`);
 
-        await rest.put(Routes.applicationCommands(clientId), { body: commands });
+    await rest.put(Routes.applicationCommands(clientId), { body: commands });
 
-        console.log('Successfully reloaded application (/) commands.');
-    } catch (error) {
-        console.error(error);
-    }
-})();
+    console.log('Successfully reloaded application (/) commands.');
+} catch (error) {
+    console.error(error);
+}

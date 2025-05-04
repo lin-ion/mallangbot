@@ -9,3 +9,7 @@ services:
         volumes:
             - ./data:/app/data
             - ./.env.production.local:/app/.env.production.local
+        deploy:
+            restart_policy:
+                condition: on-failure
+                delay: 30s

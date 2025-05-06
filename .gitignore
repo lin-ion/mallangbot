@@ -1,6 +1,10 @@
 # Github self-hosted runner
 actions-runner/
 
+# Data volumes
+data/
+
+### Default Node.js .gitignore rules
 # Logs
 logs
 *.log

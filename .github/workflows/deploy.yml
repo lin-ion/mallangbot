@@ -3,6 +3,7 @@ on:
     push:
         branches: [main]
         paths:
+            - '.github/workflows/deploy.yml'
             - 'docker-compose.yml'
             - 'Dockerfile'
             - 'src/**'
@@ -26,12 +27,12 @@ jobs:
             - name: Build production image
               run: docker compose build --pull
 
+            - name: Create host directory
+              run: mkdir -p data
+
             - name: Recreate container
               run: docker compose up -d --force-recreate
 
             - name: Deploy commands
               run: docker compose exec -it "$(docker compose config --services)" npm run deploy-commands
               # TODO: 변경 사항이 있을 경우에만 실행하도록 수정 (deploy-commands.ts에서 구현 필요)
-
-            - name: Clean up old images
-              run: docker image prune -f
